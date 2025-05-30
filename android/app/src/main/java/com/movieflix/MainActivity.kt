@@ -5,6 +5,9 @@ import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
+import com.facebook.react.modules.i18nmanager.I18nUtil
+import com.facebook.react.modules.i18nmanager.I18nUtil.Companion.instance
+
 
 class MainActivity : ReactActivity() {
 
@@ -22,6 +25,6 @@ class MainActivity : ReactActivity() {
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(null)
+        super.onCreate(null);
     }
 }

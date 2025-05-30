@@ -9,9 +9,6 @@ export const enStrings = {
     'Password must be 8–15 chars with 1 uppercase and 1 special character',
   submit: 'Submit',
   logout: 'Logout',
-  areYouSure: 'Are you sure?',
-  yes: 'Yes',
-  no: 'No',
 };
 
 export const arStrings = {
@@ -25,7 +22,4 @@ export const arStrings = {
     'يجب أن تتكون كلمة المرور من 8 إلى 15 حرفًا مع حرف كبير واحد وحرف خاص واحد',
   submit: 'يُقدِّم',
 logout: 'تسجيل الخروج',
-areYouSure: 'هل أنت متأكد؟',
-  yes: 'نعم',
-  no: 'لا',
 };
