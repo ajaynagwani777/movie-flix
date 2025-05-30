@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { MovieResults } from '../models/movie.model';
+import Config from 'react-native-config';
 
 interface MoviesState {
   data: MovieResults | [] | undefined;
@@ -13,10 +14,10 @@ const initialState: MoviesState = {
   loading: false,
   error: null,
 };
-export const fetchMovies = createAsyncThunk('movies/fetchProtected', async () => {
-    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiY2RiZjA1ZWNiMzE1NjljNDE1YzhiNmE0NzRlMjNkNCIsIm5iZiI6MTc0ODI4NDgzMC42MTYsInN1YiI6IjY4MzRiNTllZjE0Zjc0MDZhNTgzODJlMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.PEpNumKaJyqGJALpj30CXtXPUkwy8xWz-zWQGFFIpHE';
+export const fetchMovies = createAsyncThunk('movies/fetchProtected', async (language: string) => {
+    const token = Config.TOKEN;
   try {
-    const response = await axios.get('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', {
+    const response = await axios.get(Config.API_URL?.replace('$1', language), {
     headers: {
         Authorization: `Bearer ${token}`,
     },

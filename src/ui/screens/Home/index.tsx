@@ -1,11 +1,9 @@
 import React, {JSX, useCallback, useEffect} from 'react';
 import {
-  Alert,
   FlatList,
   Image,
   ListRenderItem,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,17 +17,22 @@ import useLanguage from '../../hooks/useLanguage';
 import {Picker} from '@react-native-picker/picker';
 import { setLanguage } from '../../../redux/settingsSlice';
 import { arStrings, enStrings } from '../../../utils/strings';
+import { colors } from '../../../utils/colors';
+import { useTranslation } from 'react-i18next';
+import Text from '../../components/Text';
 
 function HomeScreen(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const language = useLanguage();
+    const { t } = useTranslation();
+
   const {data, loading, error} = useSelector(
     (state: RootState) => state.movies,
   );
-
+  const imageBaseURL = 'https://image.tmdb.org/t/p/w440_and_h660_face';
   useEffect(() => {
-    dispatch(fetchMovies());
-  }, [dispatch]);
+    dispatch(fetchMovies(language === 'ar' ? language : 'en-US'));
+  }, [dispatch, language]);
 
   const setPickerValue = useCallback((itemValue: string) => {
     dispatch(setLanguage(itemValue));
@@ -37,18 +40,7 @@ function HomeScreen(): JSX.Element {
   const SelectedString = language === 'en' ? enStrings : arStrings;
 
   const handleLogout = () => {
-    Alert.alert(`${SelectedString.logout}`, `${SelectedString.areYouSure}`, [
-      {
-        text: `${SelectedString.no}`,
-        style: 'cancel',
-      },
-      {
-        text: `${SelectedString.yes}`,
-        onPress: async () => {
-          dispatch(logout());
-        },
-      },
-    ]);
+    dispatch(logout());
   };
 
   if (loading) {
@@ -60,7 +52,7 @@ function HomeScreen(): JSX.Element {
   }
 
   const renderMovieItem: ListRenderItem<Movie> = ({item}) => {
-    const imageSource = `https://image.tmdb.org/t/p/w440_and_h660_face${item.poster_path}`;
+    const imageSource = imageBaseURL + item.poster_path;
     return (
       <View style={styles.movieCard}>
         <Image
@@ -81,7 +73,7 @@ function HomeScreen(): JSX.Element {
           <View style={styles.pickerContainer}>
             <Picker
               style={styles.picker}
-              dropdownIconColor={'white'}
+              dropdownIconColor={colors.white}
               selectedValue={language}
               onValueChange={setPickerValue}>
               <Picker.Item label="En" value="en" />
@@ -89,7 +81,7 @@ function HomeScreen(): JSX.Element {
             </Picker>
           </View>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-            <Text style={styles.logout}>{SelectedString.logout}</Text>
+            <Text style={styles.logout}>{t(SelectedString.logout)}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -120,13 +112,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: '#e71f63',
+    backgroundColor: colors.primary,
     flexDirection: 'row',
     paddingHorizontal: 15,
     alignItems: 'center',
   },
   heading: {
-    color: '#ffffff',
+    color: colors.white,
     fontWeight: 500,
     fontSize: 22,
   },
@@ -141,12 +133,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   logout: {
-    color: '#ffffff',
+    color: colors.white,
     fontWeight: 700,
   },
   movieCard: {
     elevation: 2,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: 10,
     width: 180,
     height: 250,
@@ -179,7 +171,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   picker: {
-    color: 'white',
+    color: colors.white,
   },
 });
 
